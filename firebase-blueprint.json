@@ -1,0 +1,131 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Employee profile in Quality Audit system",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "roleInCompany": { "type": "string" },
+        "jobFunction": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "email", "displayName", "roleInCompany", "jobFunction", "createdAt"]
+    },
+    "AuditSession": {
+      "title": "AuditSession",
+      "description": "An isolated multi-turn audit interview session",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "topic": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "completed"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "interactionCount": { "type": "number" },
+        "lastActivity": { "type": "string" },
+        "firstPrompt": { "type": "string" },
+        "summaryId": { "type": "string" }
+      },
+      "required": ["sessionId", "userId", "topic", "status", "createdAt", "updatedAt", "interactionCount"]
+    },
+    "Interaction": {
+      "title": "Interaction",
+      "description": "An immutable turn of dialogue between an employee and Gemini auditor",
+      "type": "object",
+      "properties": {
+        "interactionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "userPrompt": { "type": "string" },
+        "geminiResponse": { "type": "string" },
+        "modelUsed": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "responseFailed": { "type": "boolean" }
+      },
+      "required": ["interactionId", "userId", "sessionId", "userPrompt", "geminiResponse", "modelUsed", "timestamp"]
+    },
+    "AuditSummary": {
+      "title": "AuditSummary",
+      "description": "Structured quality audit synthesis per session",
+      "type": "object",
+      "properties": {
+        "summaryId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userRole": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "processArea": { "type": "string" },
+        "processSteps": { "type": "array" },
+        "painPoints": { "type": "array" },
+        "complaints": { "type": "array" },
+        "suggestions": { "type": "array" },
+        "quickWins": { "type": "array" },
+        "openQuestions": { "type": "array" },
+        "needsReview": { "type": "boolean" },
+        "rawText": { "type": "string" }
+      },
+      "required": ["summaryId", "userId", "userName", "userRole", "sessionId", "createdAt", "processArea"]
+    },
+    "CompanyBasisDoc": {
+      "title": "CompanyBasisDoc",
+      "description": "Benchmark process documents uploaded by Super Admin",
+      "type": "object",
+      "properties": {
+        "docId": { "type": "string" },
+        "title": { "type": "string" },
+        "extractedText": { "type": "string" },
+        "uploadedAt": { "type": "string" },
+        "uploadedBy": { "type": "string" },
+        "fileSize": { "type": "number" }
+      },
+      "required": ["docId", "title", "extractedText", "uploadedAt", "uploadedBy", "fileSize"]
+    },
+    "ConsolidatedReport": {
+      "title": "ConsolidatedReport",
+      "description": "Cross-user executive quality audit report",
+      "type": "object",
+      "properties": {
+        "reportId": { "type": "string" },
+        "title": { "type": "string" },
+        "generatedAt": { "type": "string" },
+        "summaryCount": { "type": "number" },
+        "painPointsByArea": { "type": "object" },
+        "executiveNarrative": { "type": "string" },
+        "modelUsed": { "type": "string" }
+      },
+      "required": ["reportId", "title", "generatedAt", "summaryCount", "executiveNarrative", "modelUsed"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile with role in AIMyScrape and job function"
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/AuditSession" },
+      "description": "Audit interview sessions belonging to the user"
+    },
+    "/users/{userId}/interactions/{interactionId}": {
+      "schema": { "$ref": "#/entities/Interaction" },
+      "description": "Immutable audit interview turns for the user"
+    },
+    "/users/{userId}/summaries/{summaryId}": {
+      "schema": { "$ref": "#/entities/AuditSummary" },
+      "description": "Structured quality audit summaries for the user"
+    },
+    "/companyBasis/{docId}": {
+      "schema": { "$ref": "#/entities/CompanyBasisDoc" },
+      "description": "Audit benchmark documents uploaded exclusively by Super Admin"
+    },
+    "/auditReports/{reportId}": {
+      "schema": { "$ref": "#/entities/ConsolidatedReport" },
+      "description": "Consolidated cross-user audit reports generated by backend"
+    }
+  }
+}

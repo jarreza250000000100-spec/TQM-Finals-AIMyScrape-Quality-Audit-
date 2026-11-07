@@ -1,0 +1,6 @@
+{
+  "name": "Quality Audit - AIMyScrape Process & Operations",
+  "description": "Authenticated employee quality audit platform for AIMyScrape (SimpleCode AI), facilitating structured Gemini interviews on scraper maintenance, false-zero detection, NYSCEF court filing, runner operations, and executive consolidation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
